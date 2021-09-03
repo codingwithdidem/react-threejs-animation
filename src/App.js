@@ -36,7 +36,7 @@ const App = () => {
     document.body.style.cursor = `url('data:image/svg+xml;base64,${btoa(
       hovered ? cursor : auto
     )}'), auto`
-  }, [hovered])
+  }, [hovered, snap.items])
 
   const onPointerOver = (event) => {
     event.stopPropagation()
