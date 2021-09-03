@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 html,
 body,
 #root {
+  font-family: 'Poppins', sans-serif;
   overflow: hidden;
   width: 100vw;
   height: 100vh;
@@ -30,9 +32,4 @@ body,
     #11e8bb 0%,
     #8200c9 100%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }

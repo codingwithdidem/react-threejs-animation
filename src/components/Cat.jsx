@@ -1,12 +1,38 @@
 import React, { useRef } from 'react'
-import { useGLTF, useAnimations } from '@react-three/drei'
+import { useGLTF } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
+import { useSnapshot } from 'valtio'
 
 // https://www.cgtrader.com/items/2951928/download-page
-const Cat = (props) => {
-  const group = useRef()
+const Cat = ({
+  state,
+  onPointerOver,
+  onPointerOut,
+  onPointerDown,
+  onPointerMissed,
+  ...rest
+}) => {
+  const snap = useSnapshot(state)
   const { nodes, materials } = useGLTF('/cat.glb')
+  const group = useRef()
+
+  // Animate model
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime()
+    group.current.rotation.y = Math.sin(t / 4) / 4
+    group.current.position.y = (1 + Math.sin(t / 1.5)) / 2
+  })
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group
+      ref={group}
+      {...rest}
+      dispose={null}
+      onPointerOver={onPointerOver}
+      onPointerOut={onPointerOut}
+      onPointerDown={onPointerDown}
+      onPointerMissed={onPointerMissed}
+    >
       <mesh
         geometry={nodes.Body.geometry}
         material={nodes.Body.material}
@@ -28,10 +54,15 @@ const Cat = (props) => {
             scale={0.28}
           />
         </mesh>
-        <mesh geometry={nodes.Belly.geometry} material={materials.belly}>
+        <mesh
+          geometry={nodes.Belly.geometry}
+          material={materials.belly}
+          material-color={snap.items.belly}
+        >
           <mesh
             geometry={nodes.Marks_belly.geometry}
             material={nodes.Marks_belly.material}
+            material-color={snap.items['skin']}
             position={[0, -0.11, 0.88]}
             rotation={[-0.52, 0, 0]}
             scale={[0.11, 0.04, 0.01]}
@@ -59,11 +90,12 @@ const Cat = (props) => {
           <mesh
             geometry={nodes.Sphere.geometry}
             material={materials['eyes | sclera']}
-            material-color={'#0000FF'}
+            material-color={snap.items['eyes | sclera']}
           />
           <mesh
             geometry={nodes.Sphere_1.geometry}
             material={materials['eyes | pupil']}
+            material-color={snap.items['eyes | pupil']}
           />
         </group>
         <mesh
@@ -76,6 +108,7 @@ const Cat = (props) => {
           <mesh
             geometry={nodes.Claws_feet.geometry}
             material={nodes.Claws_feet.material}
+            material-color={snap.items.claws}
             position={[-0.72, -2.4, -0.04]}
             rotation={[0.12, 0.19, -0.22]}
             scale={[0.36, 0.58, 0.32]}
@@ -84,12 +117,14 @@ const Cat = (props) => {
         <mesh
           geometry={nodes.Leaf_hat.geometry}
           material={materials['leaf | body']}
+          material-color={snap.items['leaf | body']}
           position={[0, 0.92, 0]}
           scale={0.41}
         >
           <mesh
             geometry={nodes.Stalk.geometry}
             material={materials['leaf | stalk']}
+            material-color={snap.items['leaf | stalk']}
             position={[0.01, 0.41, -1.3]}
             rotation={[0.08, 0, 0]}
             scale={[0.15, 0.08, 0.59]}
@@ -98,6 +133,7 @@ const Cat = (props) => {
         <mesh
           geometry={nodes.Nose.geometry}
           material={materials.nose}
+          material-color={snap.items.nose}
           position={[0, 0.38, 0.8]}
           rotation={[1.01, 0, 0]}
           scale={[0.13, 0.12, 0.09]}
@@ -111,6 +147,7 @@ const Cat = (props) => {
         <mesh
           geometry={nodes.Whiskers.geometry}
           material={materials.whiskers}
+          material-color={snap.items.whiskers}
           position={[0.42, 0.2, 0.4]}
           rotation={[0, 0.35, -0.05]}
           scale={[0.04, 0.04, 0.04]}
