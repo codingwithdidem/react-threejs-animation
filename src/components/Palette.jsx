@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { useSnapshot } from 'valtio'
 
